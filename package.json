@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "build": "echo \"Nothing to build for this Node/Express app\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

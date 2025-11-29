@@ -42,7 +42,79 @@ function generatePkcePair() {
 
 // Home: simple link
 app.get('/', (req, res) => {
-  res.send('<a href="/login">Login with Quran.Foundation (User APIs PoC)</a>');
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Quran.Foundation OAuth2 Sample</title>
+        <style>
+          :root {
+            --bg: #0f172a;
+            --panel: #111827;
+            --text: #e5e7eb;
+            --accent: #10b981;
+            --accent-dim: #059669;
+          }
+          * { box-sizing: border-box; }
+          body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.2), transparent 35%), var(--bg);
+            color: var(--text);
+            font-family: "Segoe UI", Tahoma, sans-serif;
+          }
+          .card {
+            width: min(480px, 90vw);
+            padding: 32px;
+            border-radius: 16px;
+            background: linear-gradient(145deg, var(--panel), #0b1220);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+            text-align: center;
+          }
+          h1 {
+            margin: 0 0 8px;
+            font-size: 1.8rem;
+            letter-spacing: 0.5px;
+          }
+          p {
+            margin: 0 0 24px;
+            color: #cbd5e1;
+          }
+          a.button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            background: var(--accent);
+            color: #0b1220;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+            box-shadow: 0 12px 30px rgba(16, 185, 129, 0.3);
+          }
+          a.button:hover {
+            background: var(--accent-dim);
+            transform: translateY(-2px);
+            box-shadow: 0 16px 34px rgba(16, 185, 129, 0.35);
+          }
+        </style>
+      </head>
+      <body>
+        <main class="card">
+          <h1>Quran.Foundation OAuth2</h1>
+          <p>PKCE login demo that exchanges the code and calls /auth/v1/collections.</p>
+          <a class="button" href="/login">Login with Quran.Foundation</a>
+        </main>
+      </body>
+    </html>
+  `);
 });
 
 // Step 2 from docs: build authorization URL with PKCE
