@@ -127,7 +127,7 @@ app.get('/login', (req, res) => {
     response_type: 'code',
     client_id: CLIENT_ID,
     redirect_uri: REDIRECT_URI,
-    scope: 'openid offline user collection', // from docs
+    scope: 'openid offline_access user collection', // from docs
     state: currentState,
     nonce: crypto.randomBytes(16).toString('hex'),
     code_challenge: codeChallenge,
@@ -179,7 +179,7 @@ app.get('/oauth/callback', async (req, res) => {
 
     // Step 4 from docs: call a user API with x-auth-token + x-client-id
     const collectionsResponse = await axios.get(
-      `${API_BASE}/auth/v1/collections`,
+      `${API_BASE}/auth/v1/collections?first=1`,
       {
         headers: {
           'x-auth-token': accessToken,
