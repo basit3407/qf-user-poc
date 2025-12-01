@@ -127,7 +127,7 @@ app.get('/login', (req, res) => {
     response_type: 'code',
     client_id: CLIENT_ID,
     redirect_uri: REDIRECT_URI,
-    scope: 'openid offline_access user collection', // from docs
+    scope: 'openid offline_access user collection post', // from docs
     state: currentState,
     nonce: crypto.randomBytes(16).toString('hex'),
     code_challenge: codeChallenge,
@@ -139,7 +139,7 @@ app.get('/login', (req, res) => {
 });
 
 // OAuth2 callback: exchange code -> tokens, then call a user API
-app.get('/oauth/callback', async (req, res) => {
+app.get('/callback', async (req, res) => {
   const { code, state, error, error_description } = req.query;
 
   if (error) {
