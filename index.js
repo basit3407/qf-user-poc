@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({override:true});
 
 const express = require('express');
 const axios = require('axios');
@@ -19,8 +19,25 @@ const CLIENT_ID = getRequiredEnv('QF_CLIENT_ID');
 const CLIENT_SECRET = getRequiredEnv('QF_CLIENT_SECRET');
 const REDIRECT_URI = getRequiredEnv('QF_REDIRECT_URI')
 
-const OAUTH_BASE = 'https://oauth2.quran.foundation';
-const API_BASE = 'https://apis.quran.foundation';
+
+
+// production
+// const OAUTH_BASE = 'https://oauth2.quran.foundation';
+// const API_BASE = 'https://apis.quran.foundation';
+
+
+//prelive
+const OAUTH_BASE = 'https://prelive-oauth2.quran.foundation';
+const API_BASE = 'https://apis-prelive.quran.foundation';
+
+console.log('ENV check:', {
+  CLIENT_ID,
+  HAS_SECRET: Boolean(CLIENT_SECRET),
+  REDIRECT_URI,
+  OAUTH_BASE,
+  API_BASE,
+});
+
 
 // VERY naive in-memory storage just for PoC7f04ea3a-ea78-47f2-82b4-bc1b5539dbd7
 let currentCodeVerifier = null;
@@ -127,7 +144,7 @@ app.get('/login', (req, res) => {
     response_type: 'code',
     client_id: CLIENT_ID,
     redirect_uri: REDIRECT_URI,
-    scope: 'openid offline_access user collection post', // from docs
+    scope: 'post offline_access',
     state: currentState,
     nonce: crypto.randomBytes(16).toString('hex'),
     code_challenge: codeChallenge,
@@ -135,6 +152,7 @@ app.get('/login', (req, res) => {
   });
 
   const authUrl = `${OAUTH_BASE}/oauth2/auth?${params.toString()}`;
+
   res.redirect(authUrl);
 });
 
@@ -176,6 +194,11 @@ app.get('/callback', async (req, res) => {
 
     const tokenData = tokenResponse.data;
     const accessToken = tokenData.access_token;
+    const refreshToken = tokenData.refresh_token;
+
+    console.log('Access token:', accessToken);
+    console.log('Refresh token:', refreshToken);
+
 
     // Step 4 from docs: call a user API with x-auth-token + x-client-id
     const collectionsResponse = await axios.get(
